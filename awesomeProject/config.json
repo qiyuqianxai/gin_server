@@ -1,0 +1,8 @@
+{
+  "predict_dir":"static/predictions",
+
+  "videos_pth":"videos",
+
+  "message_json":"message.json",
+  "static_file": "static"
+}

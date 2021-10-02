@@ -1,0 +1,8 @@
+{
+  "dest_img_dir":"static/dest_imgs",
+
+  "src_img_dir":"static/src_imgs",
+
+  "message_json":"message.json",
+  "static_file": "static"
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Candidates</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=0.8">
+</head>
+<body class="d-flex flex-column h-100">
+<nav class="navbar navbar-expand-lg navbar-light bg-custom">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-size:17px;">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" id="center">
+                <span class="nav-link" href="javascript: void(0)"><i class="fa fa-check-circle" aria-hidden="true"></i> 原图信息</span>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="rect">{{.rect}}</a>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="meta">{{.meta}}</a>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="sid">{{.sid}}</a>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="camera">{{.camera}}</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid" id="main-content">
+    <div class="row">
+        <div class="col-lg-2 col-sm-2">
+            <div class="row" style="margin-top: 5rem;">
+                <div class="col-lg-4 col-sm-4">
+                </div>
+                <div class="col-lg-8 col-sm-8">
+                    <table border="0" cellpadding="10" cellspacing="4" style="font-size:1.5rem;">
+                        <tbody id="first" style="color:rgb(251,3,27);">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-sm-8">
+            <div class="card">
+                <canvas id="canvas" class="card-img-top"></canvas>
+                <div style="display:none;">
+                    <img id="source" data-src="{{.image}}">
+                </div>
+                <div class="card-body">
+                    <p class="card-text" id="card-meta"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-sm-2">
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/common.js?v=0.6"></script>
+<script src="/static/js/body_detail.js?v=0.1"></script>
+</body>
+</html>

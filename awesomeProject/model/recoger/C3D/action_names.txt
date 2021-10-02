@@ -1,0 +1,5 @@
+1 phone
+2 clap
+3 walk
+4 smoke
+

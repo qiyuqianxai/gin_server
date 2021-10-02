@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Candidates</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=0.8">
+</head>
+<body class="d-flex flex-column h-100">
+<nav class="navbar navbar-expand-lg navbar-light bg-custom">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-size:17px;">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active" id="center">
+                <span class="nav-link" href="javascript: void(0)"><i class="fa fa-check-circle" aria-hidden="true"></i> 查看结果</span>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="name">{{.name}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="short">{{.short}}</a>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="dataset">{{.dataset}}</a>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="current">{{.current}}</a>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="max-label">{{.lmax}}</a>
+            </li>
+            <li class="nav-item sr-only">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="imode">{{.imode}}</a>
+            </li>
+            <li class="nav-item active">
+                <a href="#" id="previous" class="btn btn-default nav-link"><i class="fas fa-chevron-left"></i></a>
+            </li>
+            <li class="nav-item active">
+                <a href="#" id="next" class="btn btn-default nav-link"><i class="fas fa-chevron-right"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" style="padding-top:0.35rem;">
+                    <span class="badge badge-pill badge-warning" style="font-size:90%;">
+                            Label <span class="badge badge-primary" id="classid" style="font-size: 95%;"></span>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" style="padding-top:0.35rem;">
+                    <span class="badge badge-pill badge-success" style="font-size:90%;">
+                            rst <span class="badge badge-dark" id="rst" style="font-size: 95%;"></span>
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0 nav-space" id="jump" onSubmit="return false;">
+            <select id="jumpSelect" class="form-control mr-sm-2">
+                <option value="rst">by rst</option>
+                <option value="label">by label</option>
+            </select>
+            <input class="form-control mr-sm-2" type="text" placeholder="label" id="goid">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="button"> 跳至 </button>
+        </form>
+        <form class="form-inline my-2 my-lg-0 nav-space">
+            <a class="btn btn-outline-dark my-2 my-sm-0" href="/rst/{{.dataset}}" download><i class="fa fa-download"></i> 下载</a>
+        </form>
+        <form class="form-inline my-2 my-lg-0">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="go_to_homepage()"><i class="fa fa-home"></i> 主页 </button>
+        </form>
+    </div>
+</nav>
+<div class="container-fluid" id="main-content">
+    <div class="row">
+        <div class="col-lg-2 col-sm-2">
+            <div class="row" style="margin-top: 1rem;">
+                <div class="col-lg-2 col-sm-2">
+                </div>
+                <div class="col-lg-10 col-sm-10">
+                    <button type="button" class="btn btn-secondary btn-md btn-block" id="face-btn" onclick="show_face_only()">人脸</button>
+                    <button type="button" class="btn btn-secondary btn-md btn-block" id="body-btn" onclick="show_body_only()">人体</button>
+                    <button type="button" class="btn btn-secondary btn-md btn-block" id="hybrid-btn" onclick="show_hybrid(remove_hide)">全部</button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2rem;">
+                <div class="col-lg-2 col-sm-2">
+                </div>
+                <div class="col-lg-10 col-sm-10">
+                    <input class="form-control" type="text" placeholder="sid" id="sid">
+                    <button class="btn btn-outline-primary btn-md" type="button" style="margin-top:.5rem;" onclick="search_sid()"> 查找 </button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 1rem;">
+                <div class="col-lg-4 col-sm-4">
+                </div>
+                <div class="col-lg-8 col-sm-8">
+                    <p id="sid-rst" style="color:red;font-size: 1rem;"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-sm-8">
+            <div class="card-deck">
+                <div class="row" id="gallery" style="width: 100vw">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-sm-2">
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/common.js?v=0.6"></script>
+<script src="/static/js/review_body.js?v=0.2"></script>
+</body>
+</html>
