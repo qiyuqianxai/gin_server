@@ -15,47 +15,69 @@ import (
 )
 
 type config struct {
-	Dest_img_dir  string `json:"dest_img_dir"`
-	Src_img_dir   string `json:"src_img_dir"`
-	Message_json string `json:"message_json"`
-	Static_file  string `json:"static_file"`
+	Fake_img_dir      string `json:"fake_img_dir"`
+	User_img_dir      string `json:"user_img_dir"`
+	Style_gan_message string `json:"style_gan_message"`
+	Star_gan_message  string `json:"star_gan_message"`
+	Static_file       string `json:"static_file"`
 }
 
 var config_file config
 
 // send gan-nn param
-type message struct {
-	Src_img      string `json:"src_img"`
-	Gan_gender string `json:"gan_gender"`
-	Gan_eyes_color string `json:"gan_eyes_color"`
-	Gan_hair_color string `json:"gan_hair_color"`
+type style_gan_message struct {
+	Seed             string `json:"seed"`
+	Age              string `json:"age"`
+	Angle_horizontal string `json:"angle_horizontal"`
+	Angle_pitch      string `json:"angle_pitch"`
+	Beauty           string `json:"beauty"`
+	Emotion_angry    string `json:"emotion_angry"`
+	Emotion_disgust  string `json:"emotion_disgust"`
+	Emotion_easy     string `json:"emotion_easy"`
+	Emotion_fear     string `json:"emotion_fear"`
+	Emotion_happy    string `json:"emotion_happy"`
+	Emotion_sad      string `json:"emotion_sad"`
+	Emotion_surprise string `json:"emotion_surprise"`
+	Eyes_open        string `json:"eyes_open"`
+	Face_shape       string `json:"face_shape"`
+	Gender           string `json:"gender"`
+	Glasses          string `json:"glasses"`
+	Height           string `json:"height"`
+	Race_black       string `json:"race_black"`
+	Race_white       string `json:"race_white"`
+	Race_yellow      string `json:"race_yellow"`
+	Smile            string `json:"smile"`
+	Width            string `json:"width"`
 }
+var style_gan_msg style_gan_message
 
-var msg message
+type star_gan_message struct {
+	User_img string `json:"user_img"`
+	Fake_img string `json:"fake_img"`
+}
+var star_gan_msg star_gan_message
 
-
-func laod_config() (string,string,string,string) {
+func laod_config() (string,string,string,string,string) {
 	_, err := os.Stat("config.json")
 	if err != nil {
-		return "", "", "",""
+		return "", "", "","",""
 	}
 	file, err := os.Open("config.json")
 	if err != nil {
-		return "", "", "",""
+		return "", "", "","",""
 	}
 	dco := json.NewDecoder(file)
 	err = dco.Decode(&config_file)
 	if err != nil {
 		log.Println("解析错误",err)
-		return "", "", "",""
+		return "", "", "","",""
 	}
-	return config_file.Dest_img_dir,config_file.Src_img_dir,config_file.Message_json,config_file.Static_file
+	return config_file.Fake_img_dir,config_file.User_img_dir,config_file.Style_gan_message,config_file.Star_gan_message,config_file.Static_file
 }
-
 
 func main() {
 	// 读取配置的路径
-	dest_img_dir, src_img_pth, message_json, static_file := laod_config()
+	_, user_img_pth, style_gan_message, star_gan_message,static_file := laod_config()
 
 	//gin.SetMode(gin.DebugMode)
 	r := gin.Default()
@@ -78,53 +100,53 @@ func main() {
 
 	// 获取基本信息
 	r.GET("/get_base_info", func(c *gin.Context) {
-		_, err := os.Stat(src_img_pth)
-		var src_imgs []string
+		_, err := os.Stat(user_img_pth)
+		var user_imgs []string
 		if err == nil {
-			f_list,err := ioutil.ReadDir(src_img_pth)
+			f_list,err := ioutil.ReadDir(user_img_pth)
 			if err!=nil{
 				log.Fatal(err)
 			} else {
 				for _,f := range f_list{
-					src_imgs = append(src_imgs, f.Name())
+					user_imgs = append(user_imgs, f.Name())
 				}
 			}
 		}
 		if os.IsNotExist(err) {
-			err := os.Mkdir(src_img_pth, os.ModePerm)
+			err := os.Mkdir(user_img_pth, os.ModePerm)
 			if err != nil {
 				return 
 			}
 		}
 		c.JSON(200,gin.H{
-			"img_list":src_imgs,
+			"img_list":user_imgs,
 		})
 	})
 
-	// 更新本地文件
+	// blend images
 	r.POST("/convert_img/", func(c *gin.Context) {
-		err := c.BindJSON(&msg)
+		err := c.BindJSON(&star_gan_msg)
 		if err != nil {
 			return
 		}
 		//log.Printf("%v",&msg)
 
 		// 写json文件
-		_, err = os.Stat(message_json)
+		_, err = os.Stat(star_gan_message)
 		var file *os.File
 		if err == nil {
-			file, err = os.OpenFile(message_json,os.O_WRONLY|os.O_TRUNC,0666)
+			file, err = os.OpenFile(star_gan_message,os.O_WRONLY|os.O_TRUNC,0666)
 			if err != nil {
 				log.Println(err)
 			}
 		}else {
-			file, err = os.Create(message_json)
+			file, err = os.Create(star_gan_message)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 		enc := json.NewEncoder(file)
-		err = enc.Encode(msg)
+		err = enc.Encode(star_gan_msg)
 		if err != nil {
 			log.Println(err)
 		}
@@ -132,27 +154,20 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-
-		for i:=0;i<100;i++{
-			dest_img := strings.Replace(msg.Src_img,".jpg","",-1)
-			dest_img = strings.Replace(dest_img,".jpeg","",-1)
-			dest_img = strings.Replace(dest_img,".png","",-1)
-			gender := msg.Gan_gender
-			eyes_color := msg.Gan_eyes_color
-			hair_color := msg.Gan_hair_color
-			dest_img = dest_img + "_" + gender + "_" + eyes_color + "_" + hair_color +".jpg"
-			_, err :=os.Stat(path.Join(dest_img_dir,dest_img))
-			log.Println(path.Join(dest_img_dir,dest_img))
-			if err == nil {
-				log.Println("generate dest image success!")
-				break
-			}
-			time.Sleep(time.Duration(1)*time.Second);
-		}
+		time.Sleep(time.Duration(3)*time.Second);
+		//for i:=0;i<100;i++{
+		//	blend_img := "/static/blend.jpg"
+		//	_, err :=os.Stat(blend_img)
+		//	if err == nil {
+		//		log.Println("generate dest image success!")
+		//		break
+		//	}
+		//	time.Sleep(time.Duration(1)*time.Second);
+		//}
 		c.JSON(200,gin.H{})
 	})
 
-	// 上传文件
+	// upload image
 	r.POST("/upload_file/", func(c *gin.Context) {
 		upfile, err := c.FormFile("file")
 		if err != nil {
@@ -161,7 +176,7 @@ func main() {
 		img_name := upfile.Filename
 		log.Println(img_name)
 		if strings.HasSuffix(img_name,".jpeg") || strings.HasSuffix(img_name,".jpg") || strings.HasSuffix(img_name,".png"){
-			save_pth := path.Join(src_img_pth,img_name)
+			save_pth := path.Join(user_img_pth,img_name)
 			_, err = os.Stat(save_pth)
 			if !os.IsNotExist(err) {
 				err := os.Remove(save_pth)
@@ -178,6 +193,41 @@ func main() {
 		} else{
 			c.JSON(304,gin.H{})
 		}
+	})
+
+	// generate image
+	r.POST("/generate_img/", func(c *gin.Context) {
+		err := c.BindJSON(&style_gan_msg)
+		if err != nil {
+			return
+		}
+		//log.Printf("%v",&msg)
+
+		// 写json文件
+		_, err = os.Stat(style_gan_message)
+		var file *os.File
+		if err == nil {
+			file, err = os.OpenFile(style_gan_message,os.O_WRONLY|os.O_TRUNC,0666)
+			if err != nil {
+				log.Println(err)
+			}
+		}else {
+			file, err = os.Create(style_gan_message)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+		enc := json.NewEncoder(file)
+		err = enc.Encode(style_gan_msg)
+		if err != nil {
+			log.Println(err)
+		}
+		err = file.Close()
+		if err != nil {
+			log.Println(err)
+		}
+		time.Sleep(time.Duration(3)*time.Second);
+		c.JSON(200,gin.H{})
 	})
 
 	err := r.Run(":43476")

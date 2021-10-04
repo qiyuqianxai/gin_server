@@ -49,45 +49,6 @@
 		</div>
 
 		<!-- Header Main -->
-        <div id="image_info" class="row" style="margin-left: 2%;margin-top: 2%">
-            <h3>select image:</h3>
-            <div style="width: 8%; margin-bottom: 2%" >
-                <select class="form-control" id="current-image" style="font-family: 微软雅黑; margin-left: 0px">
-                </select>
-            </div>
-            <h3 style="margin-left: 5%">upload image:</h3>
-            <div id="upload_image" style="margin-bottom: 2%;">
-
-                <input type="file" id="file"><br>
-                <div id="up_progress">
-                    <div class="progress-item"></div>
-                </div>
-            </div>
-        </div>
-        <div id="gan-param-set" class="row" style="margin-left: 2%;margin-right: 2%;border: #1b1e21 dashed;">
-            <button class="btn-primary" style="width: 5%;margin-left:1%;margin-top:1%;margin-bottom:1%;font-family: 微软雅黑;font-size: medium;">gender</button>
-            <div style="width: 8%;margin-top:1%;margin-bottom:1%;" >
-                <select class="form-control" id="gan-gender" style="font-family: 微软雅黑; margin-left: 0px">
-                    <option value="female">female</option>
-                    <option value="male">male</option>
-                </select>
-            </div>
-            <button class="btn-primary" style="width: 5%; margin-left:1%;margin-top:1%;margin-bottom:1%;font-family: 微软雅黑;font-size: medium;">eyes color</button>
-            <div style="width: 8%;margin-top:1%;margin-bottom:1%;" >
-                <select class="form-control" id="gan-eyes_color" style="font-family: 微软雅黑; margin-left: 0px">
-                    <option value="red">red</option>
-                    <option value="blue">blue</option>
-                </select>
-            </div>
-            <button class="btn-primary" style="width: 5%; margin-left:1%;margin-top:1%;margin-bottom:1%;font-family: 微软雅黑;font-size: medium;">hair color</button>
-            <div style="width: 8%;margin-top:1%;margin-bottom:1%;" >
-                <select class="form-control" id="gan-hair_color" style="font-family: 微软雅黑; margin-left: 0px;">
-                    <option value="red">red</option>
-                    <option value="black">black</option>
-                    <option value="white">white</option>
-                </select>
-            </div>
-        </div>
 		<!-- Menu -->
 
 	</header>
@@ -95,23 +56,40 @@
 	<!-- Single Product -->
 
 	<div class="main_area" style="margin-top: 2%;margin-bottom: 5%;width: 100%">
-        <div class="row" style="display: flex;justify-content: center;align-items: center;">
-            <button id="convert" class="btn-warning" style="height: 20%;width: 5%;margin-bottom: 1%;font-size: large;font-family:微软雅黑; ">convert</button></div>
-		<div class="container" style="min-width: 100%;margin-bottom: 5%">
 
+		<div class="container" style="min-width: 100%;margin-bottom: 1%;border-bottom: #1b1e21 solid">
             <div class="row" style="min-width: 100%;">
                 <!-- Selected Image Display -->
-                <div class="col-lg-6 order-lg-2 order-1" style="height: 100%;">
-                    <div style="height: 100%;">
-                        <img id="src_img" src="images/cover.jpg" alt=""
+                <div class="col-lg-6 order-lg-2 order-1" style="height: 100%;border: blue solid">
+                    <div id="image_info" class="row" style="margin-left: 2%;margin-top: 2%;margin-bottom: 19%">
+                        <h3>select image:</h3>
+                        <div style="width: 8%; margin-bottom: 2%" >
+                            <select class="form-control" id="current-image" style="font-family: 微软雅黑; margin-left: 0px">
+                            </select>
+                        </div>
+                        <h3 style="margin-left: 5%">upload image:</h3>
+                        <div id="upload_image" style="margin-bottom: 2%;">
+
+                            <input type="file" id="file"><br>
+                            <div id="up_progress">
+                                <div class="progress-item"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 100%;border: #0e8ce4 solid;align-items: center;align-content: center">
+                        <img id="user_img" src="images/cover.jpg" alt=""
                         style="display: block; width: 100%; height: 100%">
                     </div>
                 </div>
 
-                <div class="col-lg-6 order-lg-2 order-3" style="height: 100%;">
-                    <div style="height: 100%;">
-                        <img id="dest_img" src="images/cover.jpg" alt=""
-                        style="display: block; width: 100%; height: 100%">
+                <div class="col-lg-6 order-lg-2 order-3" style="height: 100%; border: red solid">
+                    <div id="gan-param-set" class="row" style="border: white solid;">
+
+                    </div>
+
+                    <div style="height: 100%; border: red solid;align-items: center;align-content: center">
+                        <img id="fake_img" src="images/cover.jpg" alt=""
+                        style="width: 100%; height: 100%">
                     </div>
                 </div>
 
@@ -138,7 +116,13 @@
 <!--			</div>-->
 		</div>
 	</div>
+        <div class="row" style="display: flex;justify-content: center;align-items: center;">
+            <button id="convert" class="btn-warning" style="height: 20%;width: 5%;margin-bottom: 1%;font-size: x-large;font-family:微软雅黑; ">blend</button></div>
+		<div class="row" style="display: flex;justify-content: center;align-items: center;">
+				<img id="blend_img" src="images/cover.jpg" alt=""
+					 style="display: block; width: 50%; height: 50%;border: green solid">
 
+		</div>
 	<!-- Copyright -->
 
 	<div class="copyright">
