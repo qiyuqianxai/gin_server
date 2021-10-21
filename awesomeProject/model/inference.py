@@ -623,7 +623,7 @@ def detect_capture():
             print("drawing and data_analysis time:", time.time() - t1)
             count += 1
     cap.release()
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 # 测试图片
 def test_img(img_pth):

@@ -44,7 +44,7 @@ $(function () {
         '                            <input type="number" class="face_param" id="seed" value=0 min="0" max="9999" style="margin-top:1%;margin-bottom:1%;font-family: 微软雅黑;font-size: large;">\n' +
         '                        </div>'
     html_str += '<div style="width:24%; float: left;justify-content: center;align-items: center" >\n' +
-        '                                   <button id="image_generate" class="btn-danger" style="margin-left:100%;margin-top:1%;margin-bottom:1%;font-family: 微软雅黑;font-size: x-large;float: left">generate</button>\n' +
+        '                                   <button id="image_generate" class="btn-warning" style="margin-left:100%;margin-top:1%;margin-bottom:1%;font-family: 微软雅黑;font-size: x-large;float: left">generate</button>\n' +
         '                                </div>'
     $('#gan-param-set').html(html_str);
     // 加载按键信息
@@ -55,8 +55,6 @@ $(function () {
 
 // load src_imgs list
 function get_base_info() {
-
-
     $.ajax({
         url:"/get_base_info/",
         contentType: "application/json; charset=utf-8",
@@ -109,8 +107,11 @@ function get_base_info() {
 // 设置各个功能响应
 function set_click_response() {
     // ai功能响应
-    $('#convert').blur().on("click",function () {
-        convert_img();
+    $('#convert_0').blur().on("click",function () {
+        blend_img("0","0");
+    });
+    $('#convert_1').blur().on("click",function () {
+        blend_img("0","1");
     });
 
     $('#upload_image').blur().on("click",function () {
@@ -125,10 +126,12 @@ function set_click_response() {
 }
 
 // blend images
-function convert_img(){
+function blend_img(blend_obj,blend_type){
     var post_data = JSON.stringify({
         user_img: current_image,
         fake_img: $('#fake_img').attr("src").replace('fake_imgs/',''),
+        blend_obj:blend_obj,
+        blend_type:blend_type
     });
     $.ajax({
         url: "/convert_img/",
@@ -136,8 +139,11 @@ function convert_img(){
         cache:false,
         data:post_data,
         success: function (data) {
-            var blend_img = "/static/blend_imgs/"+current_image.replace(".jpeg","").replace(".jpg","").replace(".png","") + "_" +
-                $('#fake_img').attr("src").replace('fake_imgs/','')
+            var blend_img;
+            if (blend_type==="0")
+                blend_img = "/static/blend_imgs/"+blend_obj+"_" + current_image.replace(".jpeg","").replace(".jpg","").replace(".png","") + "_" +$('#fake_img').attr("src").replace('fake_imgs/','')
+            else
+                blend_img = "/static/blend_imgs/"+blend_obj+"_" + $('#fake_img').attr("src").replace('fake_imgs/','').replace('.png','') + "_" + current_image.replace(".jpeg","").replace(".jpg","").replace(".png","")+'.png'
             var img = new Image()
             // 改变图片的src
             img.src = blend_img

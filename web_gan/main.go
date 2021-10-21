@@ -52,8 +52,10 @@ type style_gan_message struct {
 var style_gan_msg style_gan_message
 
 type star_gan_message struct {
-	User_img string `json:"user_img"`
-	Fake_img string `json:"fake_img"`
+	User_img   string `json:"user_img"`
+	Fake_img   string `json:"fake_img"`
+	Blend_obj  string `json:"blend_obj"`
+	Blend_type string `json:"blend_type"`
 }
 var star_gan_msg star_gan_message
 
@@ -92,6 +94,10 @@ func main() {
 	r.GET("/index", func(c *gin.Context) {
 		// c.HTML(http.StatusOK, "index.html",nil)
 		c.Redirect(http.StatusFound, "/static/index.html")
+	})
+
+	r.GET("/animal_gan", func(c *gin.Context) {
+		c.Redirect(http.StatusFound, "/static/animal_gan.html")
 	})
 
 	r.GET("/", func(c *gin.Context) {
